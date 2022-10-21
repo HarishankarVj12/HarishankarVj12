@@ -1,0 +1,53 @@
+Step 1: Get Url From prometheus.io Lastest Version.
+Step 2: By using wget to download the package
+Step 3: unzip prometheus package by using of unzip command
+Step 4: Check for all updates using command – “sudo apt update -y” 
+Step 5: Navigate to prometheus and copy “prometheus” & “promtool” to /usr/local/bin.
+Step 6: Start PROMETHEUS process using “./prometheus --config.file=prometheus.yml"
+Step 7: Verify by entering <IP_ADDRESS:9090> in the Browser as below : 3.135.194.87:9090
+Step 8: Change <IP_ADDRESS:9090>/metrics to check the available metrics of the host
+INSTALLATION OF NODE EXPORTER
+1. Login to UBUNTU machine (Depending upon your requirement create the number of servers)
+For better understanding, create more than 2 servers for Assessment. 
+2. Follow same steps – Login as ROOT user and check for updates. 
+3. Navigate to NODE EXPORTER in https://prometheus.io/download/
+4. Using WGET command – Extract Node Exporter file to the respective servers
+5. Extract using TAR command : root@ip-172-31-27-223:~# tar -xvzf node_exporter-1.2.2.linux-amd64.tar.gz
+6. Navigate to node_exporter-1.2.2.linux-amd64/ and start NODE EXPORTER PROCESS by below command
+root@ip-172-31-27-223:~/node_exporter-1.2.2.linux-amd64# ./node_exporter &
+7.Verify using <IP_ADDRESS:9100> - By default Node Exporter uses PORT 9100
+Now we need to map NODE EXPORTER server to our PROMETHEUS server to fetch metrics under 
+PROMETHEUS UI – (Refer STEP 8 in PROMETHEUS INSTALLATION - 3.135.194.87:9090) 
+1. Login PROMETHEUS SERVER and navigate to /root/prometheus-2.29.1.linux-amd64
+2. Open prometheus.yml file and add below details 
+ - job_name: "Node_Exporter"
+ # metrics_path defaults to '/metrics'
+ # scheme defaults to 'http'.
+ static_configs:
+ - targets: ["18.188.90.25:9100"] ----→ IP_ADDRESS:9100
+3.Stop PROMETHEUS PROCESS by Killing it 
+ps -ef | grep prometheus
+kill -9 <PID>
+  
+FINAL VERIFICATION can be done under TARGETS to see existing JOBS and SERVERS mapped
+  
+INSTALLATION OF GRAFANA
+1. Login to PROMETHEUS server (or create a new server to avoid confusion)
+2. Download latest version of Grafana from https://grafana.com/grafana/download
+3. Select the version (8.1.1) and Edition as OPEN SOURCE and LINUX OS
+4. Under Standalone Linux Binaries, you can find the commands to directly install in your Machine
+5. Navigate to grafana-8.1.1/ and BIN directory and execute below command: 
+root@ip-172-31-6-217:~/grafana-8.1.1/bin# ./grafana-server &
+7.Cross verify in browser using IP Address of the Machine with Port# 3000
+8. When you’re trying to login GRAFANA UI for the FIRST time – Enter Username and Password as ADMIN
+USERNAME: admin
+PASSWORD: admin
+Once above credentials is entered, it will prompt for a NEW Password:
+  
+ADDING PROMETHEUS TO GRAFANA
+1. Add DATASOURCE as PROMETHEUS
+2. Add PROMETHEUS server with PORT# 9090 as http://3.135.194.87:9090/
+3. Save and TEST the connection – It should display as below 
+4. Import DASHBOARD to Visualise the METRICS from https://grafana.com/grafana/dashboards
+5. Once Dashboard is IMPORTED, check if the exact IP ADDRESS of NODE EXPORTER is popping up in the 
+
